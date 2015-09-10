@@ -23,7 +23,6 @@
     });
 
     socket.on('connect', function(){
-      socket.emit('controller connected', {room:'no1', msg:'controller'});
     });
 
     socket.on('game connected', function(msg){

@@ -11,16 +11,24 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      .share-url {text-align: center; min-width: 350px; padding: 8px 5px 7px 5px; border: 1px solid #2aa52a; 
+        display: inline-block; text-transform: none; font-size: 17px;}
     </style>
   </head>
   <body>
+    <p class="share-url">
+      <span id="url"></span>
+      <a href=""  target="_blank">Control Pad</a>
+    </p>
     <ul id="messages"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-    var namespace = window.location.pathname.substr(0,6);
-    alert(namespace);
+    var href = window.location.href;
+    var namespace = window.location.pathname;
+    $('#url').text(href + 'ctrl');
+    $('a').attr("href", href + 'ctrl');
     var socket = io(namespace);
     socket.on('connect', function(){
       socket.emit('game connected', 'game');

@@ -24,7 +24,7 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-    var namespace = window.location.pathname;
+    var namespace = window.location.pathname.substr(0,6);
     var socket = io(namespace);
     $('form').submit(function(){
       socket.emit('control msg', $('#m').val());
@@ -32,16 +32,14 @@
       return false;
     });
 
-    socket.on('test', function (msg) {
+    socket.on('url', function (msg) {
       window.alert(msg);
     });
 
     socket.on('connect', function(){
-      socket.emit('controller connected', {room:'no1', msg:'controller'});
     });
 
     socket.on('game connected', function(msg){
-      console.log(msg);
       $('#messages').append($('<li>').text(msg));
     });
 

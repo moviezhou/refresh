@@ -3,7 +3,6 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var count = 0;
-var sock_ctrl,sock_game;
 var nasp, url;
 
 
@@ -14,26 +13,19 @@ app.get('/', function(req, res){
   nasp = io.of('/' + url);
 
   nasp.on('connection', function(socket){
-    nasp.emit('test', url);
+    nasp.emit('url', url);
     socket.on('disconnect', function() {
       console.log("disconnected");
     });
 
     socket.on('controller connected', function(msg){
-    sock_ctrl = socket.id;
-    console.log('sock_ctrl: ' + sock_ctrl);
-    room = msg.room;
-    socket.join(room);
   });
 
     socket.on('game connected', function(){
-    sock_game = socket.id;
-    console.log('sock_game: ' + sock_game);
-    socket.join(room);
   });
 
     socket.on('control msg', function(msg){
-    socket.broadcast.emit('control msg', msg);
+      socket.broadcast.emit('control msg', msg);
   });
 });
 
@@ -49,13 +41,13 @@ app.get('/game', function(req, res){
   res.redirect('/' + url);
 });
 
-app.get('/*?game', function(req, res){
-  res.sendFile(__dirname + '/game.html');
+app.get('/*?ctrl', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
 
 
 app.get('/*', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/game.html');
 });
 
 // generate random url string
