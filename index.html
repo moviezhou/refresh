@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Home</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      canvas  {box-shadow: 0px 0px 10px blue;}
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <canvas id="controlpad" width="800" height="600"></canvas>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+    var namespace = window.location.pathname;
+    var socket = io(namespace);
+    $('form').submit(function(){
+      socket.emit('control msg', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+
+    socket.on('test', function (msg) {
+      window.alert(msg);
+    });
+
+    socket.on('connect', function(){
+      socket.emit('controller connected', {room:'no1', msg:'controller'});
+    });
+
+    socket.on('game connected', function(msg){
+      console.log(msg);
+      $('#messages').append($('<li>').text(msg));
+    });
+
+
+    // canvas
+    var controller = document.getElementById('controlpad');
+    var ctx = controller.getContext('2d');
+    ctx.font = "48px serif";
+    ctx.fillText("Touch Me", 300, 300);
+    
+    controller.addEventListener('click', function() {
+      socket.emit('control msg', "piu!");
+    });
+    </script>
+  </body>
+</html>

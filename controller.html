@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Controller</title>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="uid"/><button>UserID</button>
+    </form>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+    var socket = io();
+    $('form').submit(function(){
+      socket.emit('control msg', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+
+    socket.on('connect', function(){
+      socket.emit('controller connected', {room:'no1', msg:'controller'});
+    });
+
+    socket.on('game connected', function(msg){
+      console.log(msg);
+      $('#messages').append($('<li>').text(msg));
+    });
+    </script>
+  </body>
+</html>
