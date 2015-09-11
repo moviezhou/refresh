@@ -20,8 +20,10 @@
       <span id="url"></span>
       <a href=""  target="_blank">Control Pad</a>
     </p>
+    <div id="qrcode"></div>
     <ul id="messages"></ul>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/qrcode.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
@@ -29,6 +31,9 @@
     var namespace = window.location.pathname;
     $('#url').text(href + 'ctrl');
     $('a').attr("href", href + 'ctrl');
+
+    var qrcode = new QRCode(document.getElementById("qrcode"), href + 'ctrl');
+
     var socket = io(namespace);
     socket.on('connect', function(){
       socket.emit('game connected', 'game');
